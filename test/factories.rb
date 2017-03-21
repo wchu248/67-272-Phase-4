@@ -22,4 +22,17 @@ FactoryGirl.define do
     quantity 1
     date Date.current
   end
+
+  factory :school do
+    name "Ingomar Elementary"
+    street_1 "10 Downing Street"
+    street_2 "Suite #101"
+    city "Pittsburgh"
+    state "PA"
+    zip "15213"
+    min_grade 1
+    max_grade 5
+    active true
+  end
+
 end
