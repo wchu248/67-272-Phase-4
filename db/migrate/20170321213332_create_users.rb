@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :username
       t.string :password_digest
       t.string :role
-      t.boolean :active
+      t.boolean :active, default: true
 
       # t.timestamps null: false
     end
