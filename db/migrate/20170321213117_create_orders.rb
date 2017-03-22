@@ -7,7 +7,7 @@ class CreateOrders < ActiveRecord::Migration
       t.float :grand_total
       t.string :payment_receipt
 
-      t.timestamps null: false
+      # t.timestamps null: false
     end
   end
 end

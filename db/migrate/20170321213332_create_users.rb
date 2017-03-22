@@ -10,7 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :role
       t.boolean :active
 
-      t.timestamps null: false
+      # t.timestamps null: false
     end
   end
 end

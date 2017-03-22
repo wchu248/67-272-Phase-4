@@ -11,7 +11,7 @@ class CreateSchools < ActiveRecord::Migration
       t.integer :max_grade
       t.boolean :active, default: true
 
-      t.timestamps null: false
+      # t.timestamps null: false
     end
   end
 end
