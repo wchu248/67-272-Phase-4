@@ -14,6 +14,7 @@ class Purchase < ActiveRecord::Base
 
   # Callbacks
   before_create :update_item_inventory_level
+  before_destroy :is_never_destroyable
 
   private
   def item_is_active_in_system

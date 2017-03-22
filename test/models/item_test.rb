@@ -4,6 +4,7 @@ class ItemTest < ActiveSupport::TestCase
   # test relationships
   should have_many(:item_prices)
   should have_many(:purchases)
+  should have_many(:order_items)
 
   # test validations with matchers
   should validate_presence_of(:name)
@@ -76,24 +77,40 @@ class ItemTest < ActiveSupport::TestCase
       assert @weighted_pieces.reorder?
     end
 
-    should "return correct current price" do
+    should "return correct current wholesale price" do
       create_piece_prices
       assert_equal 2.50, @basic_pieces.current_price
       assert_equal 4.50, @weighted_pieces.current_price
       destroy_piece_prices
     end
 
-    should "return correct price for past date" do
+    should "return correct current manufacturer price" do
       create_piece_prices
-      assert_equal 2.25, @basic_pieces.price_on_date(8.months.ago.to_date)
-      assert_equal 3.50, @weighted_pieces.price_on_date(8.months.ago.to_date)
+      assert_equal 2.25, @basic_pieces.current_manufacturer_price
+      assert_equal 3.50, @weighted_pieces.current_manufacturer_price
+      destroy_piece_prices
+    end
+
+    should "return correct wholesale price for past date" do
+      create_piece_prices
+      assert_equal 1.95, @basic_pieces.price_on_date(8.months.ago.to_date)
+      assert_equal 2.95, @weighted_pieces.price_on_date(8.months.ago.to_date)
+      destroy_piece_prices
+    end
+
+    should "return correct manufacturer price for past date" do
+      create_piece_prices
+      assert_equal 2.25, @basic_pieces.manufacturer_price_on_date(8.months.ago.to_date)
+      assert_equal 3.50, @weighted_pieces.manufacturer_price_on_date(8.months.ago.to_date)
       destroy_piece_prices
     end
 
     should "return nil for current or past price if not set" do
       create_piece_prices
       assert_nil @zagreb_pieces.current_price
+      assert_nil @zagreb_pieces.current_manufacturer_price
       assert_nil @basic_pieces.price_on_date(36.months.ago.to_date)
+      assert_nil @basic_pieces.manufacturer_price_on_date(36.months.ago.to_date)
       destroy_piece_prices      
     end
   end

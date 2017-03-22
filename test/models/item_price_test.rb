@@ -8,7 +8,11 @@ class ItemPriceTest < ActiveSupport::TestCase
   should validate_numericality_of(:price).is_greater_than_or_equal_to(0)
   should allow_value(Date.current).for(:start_date)
   should allow_value(1.day.ago.to_date).for(:start_date)
+  should allow_value("wholesale").for(:category)
+  should allow_value("manufacturer").for(:category)
   should_not allow_value(1.day.from_now.to_date).for(:start_date)
+  should_not allow_value(123).for(:category)
+  should_not allow_value("customer").for(:category)
 
   # set up context
   context "Within context" do
@@ -40,7 +44,7 @@ class ItemPriceTest < ActiveSupport::TestCase
     end
 
     should "have a working scope called current" do
-      assert_equal [2.5, 4.5, 7.5], ItemPrice.current.all.map(&:price).sort
+      assert_equal [2.25, 2.50, 3.50, 4.50, 6.25, 7.50], ItemPrice.current.all.map(&:price).sort
     end
 
     should "have a working scope called chronological" do
@@ -48,11 +52,20 @@ class ItemPriceTest < ActiveSupport::TestCase
     end
 
     should "have a working scope called for_date" do
-      assert_equal [2.25, 3.5, 6.25], ItemPrice.for_date(9.months.ago.to_date).all.map(&:price).sort
+      assert_equal [1.95, 2.25, 2.95, 3.50, 5.95, 6.25], ItemPrice.for_date(9.months.ago.to_date).all.map(&:price).sort
     end
 
     should "have a working scope called for_item" do
       assert_equal [2.95, 3.5, 4.5], ItemPrice.for_item(@weighted_pieces.id).all.map(&:price).sort
     end
+
+    should "have a working scope called wholesale" do
+      assert_equal [2.95, 4.50], ItemPrice.for_item(@weighted_pieces.id).wholesale.all.map(&:price).sort
+    end
+
+    should "have a working scope called manufacturer" do
+      assert_equal [2.25, 3.50, 6.25], ItemPrice.manufacturer.all.map(&:price).sort
+    end
+
   end
 end

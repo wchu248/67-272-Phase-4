@@ -1,6 +1,7 @@
 module Contexts
   module ItemPrices
     # Context for item_prices (assumes items context)
+    # category is tested in the piece prices
     def create_item_prices
       create_board_prices
       create_piece_prices
@@ -47,15 +48,15 @@ module Contexts
 
     def create_piece_prices
       @bcp1 = FactoryGirl.create(:item_price, item: @basic_pieces, price: 1.95, start_date: 24.months.ago.to_date)
-      @bcp2 = FactoryGirl.create(:item_price, item: @basic_pieces, price: 2.25, start_date: 12.months.ago.to_date)
+      @bcp2 = FactoryGirl.create(:item_price, item: @basic_pieces, price: 2.25, start_date: 12.months.ago.to_date, category: "manufacturer")
       @bcp3 = FactoryGirl.create(:item_price, item: @basic_pieces, price: 2.50, start_date: 6.months.ago.to_date)
            
       @wtp1 = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 2.95, start_date: 24.months.ago.to_date)
-      @wtp2 = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 3.50, start_date: 12.months.ago.to_date)
+      @wtp2 = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 3.50, start_date: 12.months.ago.to_date, category: "manufacturer")
       @wtp3 = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 4.50, start_date: 6.months.ago.to_date)
            
       @wdp1 = FactoryGirl.create(:item_price, item: @wooden_pieces, price: 5.95, start_date: 24.months.ago.to_date)
-      @wdp2 = FactoryGirl.create(:item_price, item: @wooden_pieces, price: 6.25, start_date: 12.months.ago.to_date)
+      @wdp2 = FactoryGirl.create(:item_price, item: @wooden_pieces, price: 6.25, start_date: 12.months.ago.to_date, category: "manufacturer")
       @wdp3 = FactoryGirl.create(:item_price, item: @wooden_pieces, price: 7.50, start_date: 6.months.ago.to_date)
     end
 

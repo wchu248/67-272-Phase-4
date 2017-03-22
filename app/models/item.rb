@@ -5,6 +5,7 @@ class Item < ActiveRecord::Base
   # Relationships
   has_many :item_prices
   has_many :purchases
+  has_many :order_items
 
   # Scopes
   scope :alphabetical, -> { order(:name) }
@@ -20,25 +21,30 @@ class Item < ActiveRecord::Base
   validates_numericality_of :inventory_level, only_integer: true, greater_than_or_equal_to: 0
   validates_numericality_of :reorder_level, only_integer: true, greater_than_or_equal_to: 0
   validates_inclusion_of :category, in: CATEGORIES.map{|key, value| value}, message: "is not an option"
-  # validates_inclusion_of :category, in: CATEGORIES.to_h.values, message: "is not an option"
 
   # Other methods
   def current_price
-    curr = self.item_prices.current.chronological.first
-    if curr.nil?
-      return nil
-    else
-      return curr.price
-    end
+    curr = self.item_prices.wholesale.current.chronological.first
+    return nil if curr.nil?
+    curr.price
+  end
+
+  def current_manufacturer_price
+    curr = self.item_prices.manufacturer.current.chronological.first
+    return nil if curr.nil?
+    curr.price
   end
 
   def price_on_date(date)
-    data = self.item_prices.for_date(date).chronological.first
-    if data.nil?
-      return nil
-    else
-      return data.price
-    end
+    data = self.item_prices.for_date(date).wholesale.chronological.first
+    return nil if data.nil?
+    data.price
+  end
+
+  def manufacturer_price_on_date(date)
+    data = self.item_prices.for_date(date).manufacturer.chronological.first
+    return nil if data.nil?
+    data.price
   end
 
   def reorder?
