@@ -10,16 +10,7 @@ class SchoolTest < ActiveSupport::TestCase
   should validate_presence_of(:street_1)
   should validate_presence_of(:zip)
 
-  should validate_uniqueness_of(:name).case_insensitive
-  should validate_uniqueness_of(:zip).case_insensitive
-
-  # Validating state...
-  should allow_value("PA").for(:state)
-  should allow_value("WV").for(:state)
-  should allow_value("OH").for(:state)
-
-  should_not allow_value("bad").for(:state)
-  should_not allow_value(10).for(:state)
+  should validate_inclusion_of(:state).in_array(School::STATES_LIST.to_h.values)
 
   # Validating zip codes...
   should allow_value("03412").for(:zip)
@@ -30,6 +21,7 @@ class SchoolTest < ActiveSupport::TestCase
   should_not allow_value("0123").for(:zip)
   should_not allow_value("12h3").for(:zip)
   should_not allow_value(1521).for(:zip)
+  should_not allow_value(nil).for(:zip)
 
   # testing other scopes/methods with a context
   context "Within context" do
