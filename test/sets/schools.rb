@@ -13,7 +13,7 @@ module Contexts
         city: "Warren",
         zip: "07059",
         min_grade: 6,
-        max_grade: 8)
+        max_grade: 6)
       @watchung_high = FactoryGirl.create(:school,
         name: "Watchung Hills Regional High School",
         active: false)

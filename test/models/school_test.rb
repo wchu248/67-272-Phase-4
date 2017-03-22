@@ -11,6 +11,7 @@ class SchoolTest < ActiveSupport::TestCase
   should validate_presence_of(:zip)
 
   should validate_inclusion_of(:state).in_array(School::STATES_LIST.to_h.values)
+  should_not allow_value("Pennsylvania").for(:state)
 
   # Validating zip codes...
   should allow_value("03412").for(:zip)
@@ -22,6 +23,19 @@ class SchoolTest < ActiveSupport::TestCase
   should_not allow_value("12h3").for(:zip)
   should_not allow_value(1521).for(:zip)
   should_not allow_value(nil).for(:zip)
+
+  # Validating min_grade and max_grade...
+  should allow_value(1).for(:min_grade)
+  should allow_value(0).for(:min_grade)
+  should allow_value(1).for(:max_grade)
+  should allow_value(0).for(:max_grade)
+
+  should_not allow_value(-1).for(:min_grade)
+  should_not allow_value(1.5).for(:min_grade)
+  should_not allow_value("bad").for(:min_grade)
+  should_not allow_value(-1).for(:max_grade)
+  should_not allow_value(1.5).for(:max_grade)
+  should_not allow_value("bad").for(:max_grade)
 
   # testing other scopes/methods with a context
   context "Within context" do
@@ -54,6 +68,16 @@ class SchoolTest < ActiveSupport::TestCase
 
     should "show that a school with the same name can be created in the same town" do
       assert @central_school3.valid?
+    end
+
+    should "show that min_grade and max_grade can be the same" do
+      assert @warren_middle.valid?
+    end
+
+    should "show that a school cannot have a max_grade larger than a min_grade" do
+      bad_school = FactoryGirl.build(:school, name: "bad school", zip: "91924", min_grade: 6, max_grade: 4)
+      deny bad_school.valid?
+      bad_school.destroy
     end
 
   end

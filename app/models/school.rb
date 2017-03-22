@@ -24,6 +24,10 @@ class School < ActiveRecord::Base
   validates_format_of :zip, with: /\A\d{5}\z/, message: "should be five digits long"
   # make sure the state is a valid US state abbreviation
   validates_inclusion_of :state, in: STATES_LIST.map{|key, value| value}, message: "is not an option", allow_blank: true
+  # the min_grade cannot be negative 
+  validates_numericality_of :min_grade, only_integer: true, greater_than_or_equal_to: 0
+  # the max_grade must be greater than or equal to min_grade
+  validates_numericality_of :max_grade, only_integer: true, greater_than_or_equal_to: :min_grade
   # check for duplicates only when a new school is being created
   validate :check_for_duplicates, on: :create
 
