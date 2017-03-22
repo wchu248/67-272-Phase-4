@@ -36,12 +36,12 @@ class SchoolTest < ActiveSupport::TestCase
 
     # testing alphabetical scope
     should "show that there are four schools in in alphabetical order" do
-      assert_equal ["Central School", "Ingomar Elementary", "Warren Middle School", "Watchung Hills Regional High School"], School.alphabetical.all.map(&:name)
+      assert_equal ["Central School", "Central School", "Ingomar Elementary", "Warren Middle School", "Watchung Hills Regional High School"], School.alphabetical.all.map(&:name)
     end
 
     # testing active and inactive scopes
     should "show that there are three active schools and one inactive school" do
-      assert_equal ["Ingomar Elementary", "Central School", "Warren Middle School"], School.active.all.map(&:name)
+      assert_equal ["Ingomar Elementary", "Central School", "Warren Middle School", "Central School"], School.active.all.map(&:name)
       assert_equal ["Watchung Hills Regional High School"], School.inactive.all.map(&:name)
     end
 
@@ -50,6 +50,10 @@ class SchoolTest < ActiveSupport::TestCase
       central_school2 = FactoryGirl.build(:school, name: "Central School", zip: "07059")
       deny central_school2.valid?
       central_school2.destroy
+    end
+
+    should "show that a school with the same name can be created in the same town" do
+      assert @central_school3.valid?
     end
 
   end

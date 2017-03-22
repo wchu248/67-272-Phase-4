@@ -17,6 +17,9 @@ module Contexts
       @watchung_high = FactoryGirl.create(:school,
         name: "Watchung Hills Regional High School",
         active: false)
+      @central_school3 = FactoryGirl.create(:school,
+        name: "Central School",
+        zip: "12345")
     end
 
     def destroy_schools
