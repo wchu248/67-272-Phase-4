@@ -11,9 +11,9 @@ class User < ActiveRecord::Base
   # returns all inactive users
   scope :inactive, -> { where(active: false) }
   # returns all non-customer users
-  scope :employees, -> { where("role = 'customer'") }
+  scope :employees, -> { where("role <> 'customer'") }
   # returns all customer users
-  scope :customers, -> { where("role <> 'customer'") }
+  scope :customers, -> { where("role = 'customer'") }
   # orders results alphabetically by username
   scope :alphabetical, -> { order(:username) }
 
@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   # the role of each user must be one of 4 available roles
   validates_inclusion_of :role, in: %w[admin customer manager shipper], message: 'is not an option'
   # make sure phone numbers have correct format
-  validates_format_of :phone, with: /\A(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-.]\d{4})\z/, message: "is not a valid format"
+  validates_format_of :phone, with: /\A(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4})\z/, message: "is not a valid format"
   # make sure emails have correct format
   validates_format_of :email, with: /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net))\z/i, message: "is not a valid format"
 
@@ -38,9 +38,6 @@ class User < ActiveRecord::Base
 
   # Methods
   # -----------------------------
-
-  private
-
   # gets owner name in last, first format
   def name
     last_name + ", " + first_name
@@ -53,7 +50,8 @@ class User < ActiveRecord::Base
 
   # checks if parameter matches user role
   def role?(x)
-    x.to_s == self.role
+    return false if self.role.nil?
+    x == self.role.downcase.to_sym 
   end
 
 end

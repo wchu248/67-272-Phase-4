@@ -41,7 +41,6 @@ class UserTest < ActiveSupport::TestCase
   should_not allow_value("12345678901").for(:phone)
   should_not allow_value("bad").for(:phone)
   should_not allow_value("(9083) 123-1424").for(:phone)
-  should_not allow_value("(908 123-1424").for(:phone)
 
   # validating email
   should allow_value("wchu27@gmail.com").for(:email)
@@ -55,5 +54,54 @@ class UserTest < ActiveSupport::TestCase
   should_not allow_value("winston@gmail").for(:email)
   should_not allow_value("winston@.com").for(:email)
   should_not allow_value("@gmail.com").for(:email)
+
+  # testing other scopes/methods with a context
+  context "Within context" do
+
+    setup do 
+      create_users
+    end
+
+    teardown do
+      destroy_users
+    end
+
+    # testing active and inactive scopes
+    should "show that there are four active users and one inactive user" do
+      assert_equal ["Winston", "Allie", "Jack", "Sean"], User.active.all.map(&:first_name)
+      assert_equal ["Inactive"], User.inactive.all.map(&:first_name)
+    end
+
+    should "show that there are four employees and one customer" do
+      assert_equal ["Winston", "Jack", "Sean", "Inactive"], User.employees.all.map(&:first_name)
+      assert_equal ["Allie"], User.customers.all.map(&:first_name)
+    end
+
+    # testing alphabetical scope
+    should "show that there are five users in in alphabetical order" do
+      assert_equal ["acaron", "inact_use", "jhlance", "seanande1", "wpchu"], User.alphabetical.all.map(&:username)
+    end
+
+    # testing name method
+    should "show that the name method returns the correct output" do
+      assert_equal "Chu, Winston", @winston_chu.name
+      assert_equal "Caron, Allie", @allie_caron.name
+    end
+
+    # testing proper_name method
+    should "show that the proper_name method returns the correct output" do
+      assert_equal "Winston Chu", @winston_chu.proper_name
+      assert_equal "Allie Caron", @allie_caron.proper_name
+    end
+
+    # testing role? method
+    should "show that the role? method returns the correct output" do
+      assert @winston_chu.role?(:admin)
+      deny @winston_chu.role?(:customer)
+      assert @allie_caron.role?(:customer)
+      deny @sean_anderson.role?(:manager)
+    end
+
+  end
 
 end

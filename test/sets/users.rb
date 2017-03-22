@@ -3,30 +3,39 @@ module Contexts
     # Context for users (assumes no prior contexts)
 
     def create_users
-      @ingomar_elem = FactoryGirl.create(:school)
-      @central_school1 = FactoryGirl.create(:school,
-        name: "Central School",
-        city: "Warren",
-        zip: "07059")
-      @warren_middle = FactoryGirl.create(:school,
-        name: "Warren Middle School",
-        city: "Warren",
-        zip: "07059",
-        min_grade: 6,
-        max_grade: 6)
-      @watchung_high = FactoryGirl.create(:school,
-        name: "Watchung Hills Regional High School",
+      @winston_chu = FactoryGirl.create(:user)
+      @allie_caron = FactoryGirl.create(:user,
+        first_name: "Allie",
+        last_name: "Caron",
+        username: "acaron",
+        email: "allie_c@gmail.com",
+        role: "customer")
+      @jack_lance = FactoryGirl.create(:user,
+        first_name: "Jack",
+        last_name: "Lance",
+        username: "jhlance",
+        email: "jack_l@gmail.com",
+        role: "manager")
+      @sean_anderson = FactoryGirl.create(:user,
+        first_name: "Sean",
+        last_name: "Anderson",
+        username: "seanande1",
+        email: "sean_a@gmail.com",
+        role: "shipper")
+      @inactive_user = FactoryGirl.create(:user,
+        first_name: "Inactive",
+        last_name: "User",
+        username: "inact_use",
+        email: "inactive_user@gmail.com",
         active: false)
-      @central_school3 = FactoryGirl.create(:school,
-        name: "Central School",
-        zip: "12345")
     end
 
     def destroy_users
-      @central_school1.delete
-      @ingomar_elem.delete
-      @warren_middle.delete
-      @watchung_high.delete
+      @inactive_user.delete
+      @sean_anderson.delete
+      @jack_lance.delete
+      @allie_caron.delete
+      @winston_chu.delete
     end
 
   end
