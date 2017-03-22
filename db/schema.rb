@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170321214031) do
+ActiveRecord::Schema.define(version: 20170322143108) do
 
   create_table "item_prices", force: :cascade do |t|
     t.integer "item_id"
@@ -35,22 +35,18 @@ ActiveRecord::Schema.define(version: 20170321214031) do
   end
 
   create_table "order_items", force: :cascade do |t|
-    t.integer  "order_id"
-    t.integer  "item_id"
-    t.integer  "quantity"
-    t.date     "shipped_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "order_id"
+    t.integer "item_id"
+    t.integer "quantity"
+    t.date    "shipped_on"
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "school_id"
-    t.integer  "user_id"
-    t.date     "date"
-    t.float    "grand_total"
-    t.string   "payment_receipt"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer "school_id"
+    t.integer "user_id"
+    t.date    "date"
+    t.float   "grand_total"
+    t.string  "payment_receipt"
   end
 
   create_table "purchases", force: :cascade do |t|
@@ -62,30 +58,26 @@ ActiveRecord::Schema.define(version: 20170321214031) do
   add_index "purchases", ["item_id"], name: "index_purchases_on_item_id"
 
   create_table "schools", force: :cascade do |t|
-    t.string   "name"
-    t.string   "street_1"
-    t.string   "street_2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
-    t.integer  "min_grade"
-    t.integer  "max_grade"
-    t.boolean  "active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string  "name"
+    t.string  "street_1"
+    t.string  "street_2"
+    t.string  "city"
+    t.string  "state"
+    t.string  "zip"
+    t.integer "min_grade"
+    t.integer "max_grade"
+    t.boolean "active",    default: true
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.string   "phone"
-    t.string   "username"
-    t.string   "password_digest"
-    t.string   "role"
-    t.boolean  "active"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "email"
+    t.string  "phone"
+    t.string  "username"
+    t.string  "password_digest"
+    t.string  "role"
+    t.boolean "active"
   end
 
 end

@@ -15,6 +15,7 @@ FactoryGirl.define do
     price 1.00
     start_date Date.current
     end_date nil
+    category "wholesale"
   end
 
   factory :purchase do

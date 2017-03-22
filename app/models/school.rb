@@ -19,9 +19,27 @@ class School < ActiveRecord::Base
   # -----------------------------
   # make sure required fields are present
   validates_presence_of :name, :street_1, :zip
-  # check for duplicates only when a new school is being created
-  validates :name, :zip, uniqueness: { case_sensitive: false }, on: :create
+  # validates the format of zip codes
+  validates_format_of :zip, with: /\A\d{5}\z/, message: "should be five digits long"
   # make sure the state is a valid US state abbreviation
-  validates_inclusion_of :state, in: STATES_LIST.map {|key, value| value}, message: "is not an option", allow_blank: true
+  validates_inclusion_of :state, in: STATES_LIST.map{|key, value| value}, message: "is not an option", allow_blank: true
+  # check for duplicates only when a new school is being created
+  validate :check_for_duplicates, on: :create
+
+
+  # Methods
+  # -----------------------------
+  def already_exists?
+    School.where(name: self.name, zip: self.zip).size == 1
+  end
+
+  private
+
+  def check_for_duplicates
+    return true if self.name.nil? || self.zip.nil?
+    if self.already_exists?
+      errors.add(:name, "has already been taken")
+    end
+  end
 
 end

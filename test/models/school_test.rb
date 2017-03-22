@@ -21,6 +21,16 @@ class SchoolTest < ActiveSupport::TestCase
   should_not allow_value("bad").for(:state)
   should_not allow_value(10).for(:state)
 
+  # Validating zip codes...
+  should allow_value("03412").for(:zip)
+  should allow_value("12345").for(:zip)
+  should allow_value("99999").for(:zip)
+
+  should_not allow_value("bad").for(:zip)
+  should_not allow_value("0123").for(:zip)
+  should_not allow_value("12h3").for(:zip)
+  should_not allow_value(1521).for(:zip)
+
   # testing other scopes/methods with a context
   context "Within context" do
 
