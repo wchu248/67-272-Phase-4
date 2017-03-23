@@ -46,5 +46,20 @@ FactoryGirl.define do
     role "admin"
     active true
   end
+
+  factory :order_item do
+    association :item
+    association :order
+    quantity 1
+    shipped_on nil
+  end
   
+  factory :order do
+    association :school
+    association :user
+    date Date.current
+    grand_total 22.50
+    payment_receipt 'cGF5bWVudF9'
+  end
+
 end

@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20170322143108) do
     t.string  "username"
     t.string  "password_digest"
     t.string  "role"
-    t.boolean "active"
+    t.boolean "active",          default: true
   end
 
 end
