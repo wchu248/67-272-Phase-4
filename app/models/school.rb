@@ -6,6 +6,7 @@ class School < ActiveRecord::Base
   # Relationships
   # -----------------------------
   has_many :orders
+  has_many :users, through: :orders
 
   # Scopes
   # -----------------------------

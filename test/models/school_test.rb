@@ -4,6 +4,7 @@ class SchoolTest < ActiveSupport::TestCase
 
   # test relationships
   should have_many(:orders)
+  should have_many(:users).through(:orders)
 
   # test validations
   should validate_presence_of(:name)

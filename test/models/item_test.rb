@@ -5,6 +5,7 @@ class ItemTest < ActiveSupport::TestCase
   should have_many(:item_prices)
   should have_many(:purchases)
   should have_many(:order_items)
+  should have_many(:orders).through(:order_items)
 
   # test validations with matchers
   should validate_presence_of(:name)
