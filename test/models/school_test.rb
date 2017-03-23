@@ -24,20 +24,14 @@ class SchoolTest < ActiveSupport::TestCase
   should_not allow_value(1521).for(:zip)
   should_not allow_value(nil).for(:zip)
 
-  # Validating min_grade and max_grade...
+  # Validating min_grade...
   should allow_value(1).for(:min_grade)
   should allow_value(0).for(:min_grade)
-  should allow_value(1).for(:max_grade)
-  should allow_value(0).for(:max_grade)
 
   should_not allow_value(13).for(:min_grade)
   should_not allow_value(-1).for(:min_grade)
   should_not allow_value(1.5).for(:min_grade)
   should_not allow_value("bad").for(:min_grade)
-  should_not allow_value(13).for(:max_grade)
-  should_not allow_value(-1).for(:max_grade)
-  should_not allow_value(1.5).for(:max_grade)
-  should_not allow_value("bad").for(:max_grade)
 
   # testing other scopes/methods with a context
   context "Within context" do
@@ -80,6 +74,20 @@ class SchoolTest < ActiveSupport::TestCase
       bad_school = FactoryGirl.build(:school, name: "bad school", zip: "91924", min_grade: 6, max_grade: 4)
       deny bad_school.valid?
       bad_school.destroy
+    end
+
+    # testing max_grade...
+    should "show that max_grade is valid and invalid where it should be" do
+      assert @ingomar_elem.valid?
+      assert @warren_middle.valid?
+      @bad_school1 = FactoryGirl.build(:school, max_grade: -1)
+      deny @bad_school1.valid?
+      @bad_school2 = FactoryGirl.build(:school, max_grade: 13)
+      deny @bad_school2.valid?
+      @bad_school3 = FactoryGirl.build(:school, max_grade: 1.5)
+      deny @bad_school3.valid?
+      @bad_school4 = FactoryGirl.build(:school, max_grade: "bad")
+      deny @bad_school4.valid?
     end
 
   end
