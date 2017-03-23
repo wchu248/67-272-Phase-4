@@ -67,11 +67,25 @@ class OrderItemTest < ActiveSupport::TestCase
     end
 
     # test the subtotal instance method
-    should "show that the subtotal method returns the correct output" do
+    should "show that the subtotal instance method returns the correct output" do
       assert_equal 2.75, @vgb_order.subtotal
       assert_equal (3.10 * 2), @vbb_order.subtotal
       assert_equal 2.50, @vgb_order.subtotal(1.month.ago.to_date)
       assert_nil @vgb_order.subtotal(3.days.from_now.to_date)
+    end
+
+    # test the shipped instance method
+    should "show that the shipped instance method does the correct thing" do
+      assert_nil @vgb_order.shipped_on
+      assert_nil @vbb_order.shipped_on
+      vgb_old_inv = @vgb_order.item.inventory_level
+      vbb_old_inv = @vbb_order.item.inventory_level
+      @vgb_order.shipped
+      @vbb_order.shipped
+      assert_equal Date.current, @vgb_order.shipped_on
+      assert_equal Date.current, @vbb_order.shipped_on
+      assert_equal @vgb_order.item.inventory_level, vgb_old_inv - @vgb_order.quantity
+      assert_equal @vbb_order.item.inventory_level, vbb_old_inv - @vbb_order.quantity
     end
 
   end
