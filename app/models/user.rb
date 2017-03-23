@@ -7,13 +7,13 @@ class User < ActiveRecord::Base
   # Scopes
   # -----------------------------
   # returns only active users
-  scope :active, -> { where(active: true) }
+  scope :active,       -> { where(active: true) }
   # returns all inactive users
-  scope :inactive, -> { where(active: false) }
+  scope :inactive,     -> { where(active: false) }
   # returns all non-customer users
-  scope :employees, -> { where("role <> 'customer'") }
+  scope :employees,    -> { where("role <> 'customer'") }
   # returns all customer users
-  scope :customers, -> { where("role = 'customer'") }
+  scope :customers,    -> { where("role = 'customer'") }
   # orders results alphabetically by username
   scope :alphabetical, -> { order(:username) }
 
