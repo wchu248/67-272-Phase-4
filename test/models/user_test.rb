@@ -4,6 +4,7 @@ class UserTest < ActiveSupport::TestCase
   
   # testing relationships
   should have_many(:orders)
+  should have_many(:schools).through(:orders)
 
   # testing validations
   should validate_presence_of(:first_name)

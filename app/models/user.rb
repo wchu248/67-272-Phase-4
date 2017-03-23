@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   # Relationships
   # -----------------------------
   has_many :orders
+  has_many :schools, through: :orders
 
   # Scopes
   # -----------------------------
