@@ -88,6 +88,8 @@ class SchoolTest < ActiveSupport::TestCase
       deny @bad_school3.valid?
       @bad_school4 = FactoryGirl.build(:school, max_grade: "bad")
       deny @bad_school4.valid?
+      @bad_school5 = FactoryGirl.build(:school, max_grade: 3, min_grade: 5)
+      deny @bad_school5.valid?
     end
 
   end
