@@ -37,10 +37,17 @@ class ItemPriceTest < ActiveSupport::TestCase
     end 
 
     should "verify that the old price end_date set to today" do
+      # for wholesale prices
       assert_nil @wtp3.end_date
       @change_price = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 9.95)
       @wtp3.reload
       assert_equal Date.current, @wtp3.end_date
+      # for manufacturer prices
+      assert_nil @wtp2.end_date
+      @change_m_price = FactoryGirl.create(:item_price, item:@weighted_pieces, price: 10.00, category: "manufacturer")
+      @wtp2.reload
+      assert_equal Date.current, @wtp2.end_date
+
     end
 
     should "have a working scope called current" do
