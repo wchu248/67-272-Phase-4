@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   # Callbacks
   # -----------------------------
   before_destroy :cannot_be_destroyed
+  before_save :reformat_phone
 
   # Methods
   # -----------------------------
@@ -52,6 +53,12 @@ class User < ActiveRecord::Base
   def role?(x)
     return false if self.role.nil?
     x == self.role.downcase.to_sym 
+  end
+
+  private
+
+  def reformat_phone
+    self.phone = self.phone.to_s.gsub(/[^0-9]/,"")
   end
 
 end

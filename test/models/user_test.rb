@@ -102,6 +102,11 @@ class UserTest < ActiveSupport::TestCase
       deny @sean_anderson.role?(:manager)
     end
 
+    # testing that phone numbers are reformatted properly
+    should "show that phone numbers are reformatted properly" do
+      assert_equal "9088388767", @winston_chu.phone
+    end
+    
   end
 
 end

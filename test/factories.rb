@@ -40,7 +40,7 @@ FactoryGirl.define do
     first_name "Winston"
     last_name "Chu"
     email "wchu27@gmail.com"
-    phone "9088388767"
+    phone "908-838-8767"
     username "wpchu"
     password_digest "$2a$10$LBzumTN"
     role "admin"

@@ -30,9 +30,11 @@ class SchoolTest < ActiveSupport::TestCase
   should allow_value(1).for(:max_grade)
   should allow_value(0).for(:max_grade)
 
+  should_not allow_value(13).for(:min_grade)
   should_not allow_value(-1).for(:min_grade)
   should_not allow_value(1.5).for(:min_grade)
   should_not allow_value("bad").for(:min_grade)
+  should_not allow_value(13).for(:max_grade)
   should_not allow_value(-1).for(:max_grade)
   should_not allow_value(1.5).for(:max_grade)
   should_not allow_value("bad").for(:max_grade)
