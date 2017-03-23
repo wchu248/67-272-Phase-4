@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
 
   # Callbacks
   # -----------------------------
-  before_destroy :is_never_destroyable
+  before_destroy :cannot_be_destroyed
 
   # Methods
   # -----------------------------

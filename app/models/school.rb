@@ -31,7 +31,6 @@ class School < ActiveRecord::Base
   # check for duplicates only when a new school is being created
   validate :check_for_duplicates, on: :create
 
-
   # Methods
   # -----------------------------
   def already_exists?

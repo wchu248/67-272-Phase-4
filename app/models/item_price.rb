@@ -23,10 +23,10 @@ class ItemPrice < ActiveRecord::Base
 
   # Callbacks
   before_create :set_end_date_of_old_price
-  before_destroy :is_never_destroyable
+  before_destroy :cannot_be_destroyed
 
   # Methods
-  def is_never_destroyable
+  def cannot_be_destroyed
     return false
   end
 
