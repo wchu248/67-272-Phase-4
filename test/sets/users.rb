@@ -27,6 +27,7 @@ module Contexts
         last_name: "User",
         username: "inact_use",
         email: "inactive_user@gmail.com",
+        phone: "(123) 456-7890",
         active: false)
     end
 

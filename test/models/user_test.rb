@@ -105,8 +105,9 @@ class UserTest < ActiveSupport::TestCase
     # testing that phone numbers are reformatted properly
     should "show that phone numbers are reformatted properly" do
       assert_equal "9088388767", @winston_chu.phone
+      assert_equal "1234567890", @inactive_user.phone
     end
-    
+
   end
 
 end
