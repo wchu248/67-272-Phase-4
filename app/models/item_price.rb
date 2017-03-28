@@ -27,7 +27,7 @@ class ItemPrice < ActiveRecord::Base
 
   # Methods
   def cannot_be_destroyed
-    return false
+    false
   end
 
   # Other methods

@@ -109,6 +109,11 @@ class UserTest < ActiveSupport::TestCase
       assert_equal "1234567890", @inactive_user.phone
     end
 
+    # testing that uses can never de destroyed
+    should "show that users can never be destroyed" do 
+      deny @winston_chu.destroy
+    end
+
   end
 
 end

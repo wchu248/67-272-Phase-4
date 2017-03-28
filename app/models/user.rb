@@ -56,6 +56,11 @@ class User < ActiveRecord::Base
     x == self.role.downcase.to_sym 
   end
 
+  # users can never be destroyed
+  def cannot_be_destroyed
+    false
+  end
+
   private
 
   def reformat_phone

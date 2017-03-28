@@ -16,6 +16,11 @@ class Purchase < ActiveRecord::Base
   before_create :update_item_inventory_level
   before_destroy :cannot_be_destroyed
 
+  # Methods
+  def cannot_be_destroyed
+    false
+  end
+
   private
   def item_is_active_in_system
     all_active_items = Item.active.all.map(&:id)

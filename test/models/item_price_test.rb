@@ -74,5 +74,10 @@ class ItemPriceTest < ActiveSupport::TestCase
       assert_equal [2.25, 3.50, 6.25], ItemPrice.manufacturer.all.map(&:price).sort
     end
 
+    # testing that item prices can never de destroyed
+    should "show that item prices can never be destroyed" do 
+      deny @wtp3.destroy
+    end
+
   end
 end

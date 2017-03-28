@@ -54,5 +54,10 @@ class PurchaseTest < ActiveSupport::TestCase
       assert_equal 100, @weighted_pieces.inventory_level
     end
 
+    # testing that purchases can never de destroyed
+    should "show that purchases can never be destroyed" do 
+      deny @p_vboards.destroy
+    end
+
   end
 end
