@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 
   # Callbacks
   # -----------------------------
-  before_destroy :cannot_be_destroyed
+  before_destroy :is_never_destroyable?
   before_save :reformat_phone
 
   # Methods
@@ -56,12 +56,12 @@ class User < ActiveRecord::Base
     x == self.role.downcase.to_sym 
   end
 
+  private
+
   # users can never be destroyed
-  def cannot_be_destroyed
+  def is_never_destroyable?
     false
   end
-
-  private
 
   def reformat_phone
     self.phone = self.phone.to_s.gsub(/[^0-9]/,"")

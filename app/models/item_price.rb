@@ -23,15 +23,14 @@ class ItemPrice < ActiveRecord::Base
 
   # Callbacks
   before_create :set_end_date_of_old_price
-  before_destroy :cannot_be_destroyed
+  before_destroy :is_never_destroyable?
 
   # Methods
-  def cannot_be_destroyed
+  private
+  def is_never_destroyable?
     false
   end
 
-  # Other methods
-  private
   def item_is_active_in_system
     all_active_items = Item.active.all.map(&:id)
     unless all_active_items.include?(self.item_id)

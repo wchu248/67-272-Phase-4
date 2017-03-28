@@ -3,6 +3,9 @@ class School < ActiveRecord::Base
   # Taken from PATs example
   STATES_LIST = [['Alabama', 'AL'],['Alaska', 'AK'],['Arizona', 'AZ'],['Arkansas', 'AR'],['California', 'CA'],['Colorado', 'CO'],['Connectict', 'CT'],['Delaware', 'DE'],['District of Columbia ', 'DC'],['Florida', 'FL'],['Georgia', 'GA'],['Hawaii', 'HI'],['Idaho', 'ID'],['Illinois', 'IL'],['Indiana', 'IN'],['Iowa', 'IA'],['Kansas', 'KS'],['Kentucky', 'KY'],['Louisiana', 'LA'],['Maine', 'ME'],['Maryland', 'MD'],['Massachusetts', 'MA'],['Michigan', 'MI'],['Minnesota', 'MN'],['Mississippi', 'MS'],['Missouri', 'MO'],['Montana', 'MT'],['Nebraska', 'NE'],['Nevada', 'NV'],['New Hampshire', 'NH'],['New Jersey', 'NJ'],['New Mexico', 'NM'],['New York', 'NY'],['North Carolina','NC'],['North Dakota', 'ND'],['Ohio', 'OH'],['Oklahoma', 'OK'],['Oregon', 'OR'],['Pennsylvania', 'PA'],['Rhode Island', 'RI'],['South Carolina', 'SC'],['South Dakota', 'SD'],['Tennessee', 'TN'],['Texas', 'TX'],['Utah', 'UT'],['Vermont', 'VT'],['Virginia', 'VA'],['Washington', 'WA'],['West Virginia', 'WV'],['Wisconsin ', 'WI'],['Wyoming', 'WY']]
 
+  # Additional accessors
+  attr_reader :destroyable
+
   # Relationships
   # -----------------------------
   has_many :orders
@@ -32,6 +35,10 @@ class School < ActiveRecord::Base
   # check for duplicates only when a new school is being created
   validate :check_for_duplicates, on: :create
 
+  # Callbacks
+  # -----------------------------
+  before_destroy :is_destroyable?
+
   # Methods
   # -----------------------------
   def already_exists?
@@ -39,6 +46,10 @@ class School < ActiveRecord::Base
   end
 
   private
+
+  def is_destroyable?
+    
+  end
 
   def check_for_duplicates
     return true if self.name.nil? || self.zip.nil?
