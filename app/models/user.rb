@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
 
+  # Use built-in rails support for password protection
+  has_secure_password
+
   # Relationships
   # -----------------------------
   has_many :orders
@@ -32,6 +35,11 @@ class User < ActiveRecord::Base
   validates_format_of :phone, with: /\A(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4})\z/, message: "is not a valid format"
   # make sure emails have correct format
   validates_format_of :email, with: /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net))\z/i, message: "is not a valid format"
+  # validating password stuff
+  validates_presence_of :password, on: :create 
+  validates_presence_of :password_confirmation, on: :create 
+  validates_confirmation_of :password, message: "does not match"
+  validates_length_of :password, minimum: 4, message: "must be at least 4 characters long", allow_blank: true
 
   # Callbacks
   # -----------------------------
@@ -51,9 +59,9 @@ class User < ActiveRecord::Base
   end
 
   # checks if parameter matches user role
-  def role?(x)
-    return false if self.role.nil?
-    x == self.role.downcase.to_sym 
+  def role?(authorized_role)
+    return false if role.nil?
+    role.downcase.to_sym == authorized_role
   end
 
   private

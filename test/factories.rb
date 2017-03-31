@@ -42,7 +42,8 @@ FactoryGirl.define do
     email "wchu27@gmail.com"
     phone "908-838-8767"
     username "wpchu"
-    password_digest "$2a$10$LBzumTN"
+    password "secret"
+    password_confirmation "secret"
     role "admin"
     active true
   end

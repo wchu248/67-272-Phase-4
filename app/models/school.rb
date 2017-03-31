@@ -38,6 +38,7 @@ class School < ActiveRecord::Base
   # Callbacks
   # -----------------------------
   before_destroy :is_destroyable?
+  after_rollback :make_school_inactive_instead_of_destroy
 
   # Methods
   # -----------------------------
@@ -45,14 +46,21 @@ class School < ActiveRecord::Base
     School.where(name: self.name, zip: self.zip).size == 1
   end
 
+  def is_destroyable?
+    @destroyable = self.orders.empty?
+    @destroyable
+  end
+
   private
 
-  def is_destroyable?
-    
+  def make_school_inactive_instead_of_destroy
+    if !destroyable.nil? && !destroyable
+      self.active = false
+      @destroyable = nil
+    end
   end
 
   def check_for_duplicates
-    return true if self.name.nil? || self.zip.nil?
     if self.already_exists?
       errors.add(:name, "has already been taken")
     end

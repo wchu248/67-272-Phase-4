@@ -2,6 +2,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   
+  should have_secure_password
+
   # testing relationships
   should have_many(:orders)
   should have_many(:schools).through(:orders)
@@ -112,6 +114,40 @@ class UserTest < ActiveSupport::TestCase
     # testing that uses can never de destroyed
     should "show that users can never be destroyed" do 
       deny @winston_chu.destroy
+    end
+
+    # testing unique emails
+    should "require users to have unique emails" do
+      bad_user = FactoryGirl.build(:user, first_name: "John", email: "wchu27@gmail.com")
+      deny bad_user.valid?
+    end
+
+    # testing unique usernames
+    should "require users to have unique usernames" do
+      bad_user = FactoryGirl.build(:user, first_name: "John", username: "wpchu")
+      deny bad_user.valid?
+      bad_user2 = FactoryGirl.build(:user, first_name: "John", username: "WPchu")
+      deny bad_user2.valid?
+    end
+    
+    # new users need to have a password
+    should "require a password for new users" do
+      bad_user = FactoryGirl.build(:user, first_name: "John", password: nil)
+      deny bad_user.valid?
+    end
+    
+    # passwords must be properly confirmed
+    should "require passwords to be confirmed and matching" do
+      bad_user_1 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: nil)
+      deny bad_user_1.valid?
+      bad_user_2 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: "sauce")
+      deny bad_user_2.valid?
+    end
+    
+    # testing that passwords are at least 4 characters in length
+    should "require passwords to be at least four characters" do
+      bad_user = FactoryGirl.build(:user, first_name: "John", password: "no")
+      deny bad_user.valid?
     end
 
   end

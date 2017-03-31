@@ -93,6 +93,11 @@ class SchoolTest < ActiveSupport::TestCase
       deny @bad_school5.valid?
     end
 
+    # testing destroyable aspect
+    should "show that only schools that haven't placed an order can be destroyed; all other schools are just set to inactive" do
+      
+    end
+
   end
 
 end
