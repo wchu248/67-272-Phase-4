@@ -5,6 +5,7 @@ require './test/sets/purchases'
 require './test/sets/schools'
 require './test/sets/users'
 require './test/sets/order_items'
+require './test/sets/orders'
 
 module Contexts
   # explicitly include all sets of contexts used for testing 
@@ -14,4 +15,5 @@ module Contexts
   include Contexts::Schools
   include Contexts::Users
   include Contexts::OrderItems
+  include Contexts::Orders
 end

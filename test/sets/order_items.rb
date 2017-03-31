@@ -5,7 +5,6 @@ module Contexts
 
     def create_order_items
       # create a simple order so order items can have association with
-      @simple_order = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu)
       @vgb_order = FactoryGirl.create(:order_item, item: @vinyl_green, order: @simple_order)
       @vbb_order = FactoryGirl.create(:order_item, item: @vinyl_blue, order: @simple_order, quantity: 2)
       @vrb_order = FactoryGirl.create(:order_item, item: @vinyl_red, order: @simple_order, shipped_on: Date.current)

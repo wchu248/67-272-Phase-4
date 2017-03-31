@@ -59,8 +59,8 @@ FactoryGirl.define do
     association :school
     association :user
     date Date.current
-    grand_total 22.50
-    payment_receipt 'cGF5bWVudF9'
+    grand_total 0.00
+    payment_receipt nil
   end
 
 end
