@@ -37,10 +37,11 @@ class OrderItemTest < ActiveSupport::TestCase
   context "Within context" do
 
     setup do 
-      create_schools
-      create_users
       create_boards
       create_board_prices
+      create_schools
+      create_users
+      create_orders
       create_order_items
     end
 

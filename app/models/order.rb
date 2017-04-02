@@ -1,5 +1,12 @@
 class Order < ActiveRecord::Base
 
+  require 'base64'
+
+  # credit card attributes
+  attr_accessor :credit_card_number
+  attr_accessor :expiration_year
+  attr_accessor :expiration_month
+
   # Relationships
   has_many :order_items
   has_many :items, through: :order_items
@@ -22,6 +29,8 @@ class Order < ActiveRecord::Base
   validates_presence_of :school_id, :user_id, :date
   validate :user_is_active_in_system
   validate :school_is_active_in_system
+  validate :check_valid_card_number
+  validate :check_valid_expr_date
 
   # Callbacks
   before_save :calculate_grand_total
@@ -75,6 +84,14 @@ class Order < ActiveRecord::Base
       total += i.item.current_price * i.quantity
     end
     return total
+  end
+
+  def check_valid_card_number 
+    
+  end
+
+  def check_valid_expr_date
+
   end
 
 end
