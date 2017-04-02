@@ -55,6 +55,25 @@ class Order < ActiveRecord::Base
     5 + (0.25 * extra_pounds)
   end
 
+  def credit_card_type
+    unless credit_card.type.nil?
+      credit_card.type
+    else
+      "N/A"
+    end
+  end
+
+  def pay
+    if self.payment_receipt.nil?
+      receipt = Base64.encode64("order: #{self.id}; amount_paid: #{self.grand_total}; received: #{self.date}; card: #{self.credit_card_type} ****#{self.credit_card_number[-4..-1]}")
+      self.update_attribute(:payment_receipt, receipt)
+      self.save!
+      self.payment_receipt
+    else
+      false
+    end
+  end
+
   private
 
   def user_is_active_in_system
@@ -71,6 +90,28 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def check_valid_card_number 
+    if self.expiration_year.nil? || self.expiration_month.nil?
+      return false
+    elsif credit_card.type.nil? || self.credit_card_number.nil?
+      errors.add(:credit_card_number, "is not a valid card")
+      return false
+    else
+      return true
+    end
+  end
+
+  def check_valid_expr_date
+    if self.credit_card_number.nil?
+      return false
+    elsif credit_card.expired? || self.expiration_year.nil? || self.expiration_month.nil?
+      errors.add(:expiration_month, "is an expired card")
+      return false
+    else
+      return true
+    end
+  end
+
   def calculate_grand_total
     total_item_cost = get_item_prices
     shipping = shipping_costs
@@ -84,14 +125,6 @@ class Order < ActiveRecord::Base
       total += i.item.current_price * i.quantity
     end
     return total
-  end
-
-  def check_valid_card_number 
-    
-  end
-
-  def check_valid_expr_date
-
   end
 
 end
