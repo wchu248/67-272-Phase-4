@@ -32,9 +32,6 @@ class Order < ActiveRecord::Base
   validate :check_valid_card_number
   validate :check_valid_expr_date
 
-  # Callbacks
-  before_save :calculate_grand_total
-
   # Methods
 
   def self.not_shipped
@@ -110,12 +107,6 @@ class Order < ActiveRecord::Base
     else
       return true
     end
-  end
-
-  def calculate_grand_total
-    total_item_cost = get_item_prices
-    shipping = shipping_costs
-    self.update_attribute(:grand_total, shipping + total_item_cost)
   end
 
   # get the total prices of all the items
