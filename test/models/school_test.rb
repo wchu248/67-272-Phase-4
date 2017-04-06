@@ -95,7 +95,18 @@ class SchoolTest < ActiveSupport::TestCase
 
     # testing destroyable aspect
     should "show that only schools that haven't placed an order can be destroyed; all other schools are just set to inactive" do
-      
+      @user1 = FactoryGirl.create(:user)
+      @school1 = FactoryGirl.create(:school, name: "test destroyable", zip: "12345")
+      @order1 = FactoryGirl.create(:order, school: @school1, user: @user1)
+      @school2 = FactoryGirl.create(:school, name: "test destroyable 2", zip: "00000")
+      assert_equal true, @school1.active
+      deny @school1.destroy
+      assert_equal false, @school1.active
+      assert @school2.destroy
+      @school1.delete
+      @user1.delete
+      @order1.delete
+      @school2.delete
     end
 
   end
