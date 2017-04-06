@@ -25,7 +25,7 @@ class OrderItem < ActiveRecord::Base
     # -----------------------------
 
     def subtotal(date = Date.current)
-      return nil if !date.respond_to?(:future?) || date.future?
+      return nil if !date.respond_to?(:future?) || date.future? || self.item.price_on_date(date).nil?
       self.item.price_on_date(date) * self.quantity
     end
 
