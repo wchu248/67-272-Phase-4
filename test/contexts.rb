@@ -4,8 +4,8 @@ require './test/sets/item_prices'
 require './test/sets/purchases'
 require './test/sets/schools'
 require './test/sets/users'
-require './test/sets/order_items'
 require './test/sets/orders'
+require './test/sets/order_items'
 require './test/sets/credit_cards'
 
 module Contexts
@@ -15,7 +15,7 @@ module Contexts
   include Contexts::Purchases
   include Contexts::Schools
   include Contexts::Users
-  include Contexts::OrderItems
   include Contexts::Orders
+  include Contexts::OrderItems
   include Contexts::CreditCards
 end

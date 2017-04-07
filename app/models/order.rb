@@ -24,7 +24,7 @@ class Order < ActiveRecord::Base
   # Validations
   validates_date :date, on_or_before: lambda { Date.current }
   # make sure grand_total is a valid number
-  validates_numericality_of :grand_total, greater_than_or_equal_to: 0, allow_blank: true
+  validates_numericality_of :grand_total, greater_than: 0, allow_blank: true
   # make sure required fields are present
   validates_presence_of :school_id, :user_id, :date
   validate :user_is_active_in_system
