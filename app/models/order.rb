@@ -52,6 +52,10 @@ class Order < ActiveRecord::Base
     5 + (0.25 * extra_pounds)
   end
 
+  def credit_card
+    CreditCard.new(self.credit_card_number, self.expiration_year, self.expiration_month)
+  end
+
   def credit_card_type
     unless credit_card.type.nil?
       credit_card.type
