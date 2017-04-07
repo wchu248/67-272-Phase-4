@@ -114,6 +114,10 @@ class UserTest < ActiveSupport::TestCase
     # testing that uses can never de destroyed
     should "show that users can never be destroyed" do 
       deny @winston_chu.destroy
+      deny @allie_caron.destroy
+      deny @jack_lance.destroy
+      deny @sean_anderson.destroy
+      deny @inactive_user.destroy
     end
 
     # testing unique emails
