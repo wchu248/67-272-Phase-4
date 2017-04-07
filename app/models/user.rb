@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   # validating password stuff
   validates_presence_of :password, on: :create 
   validates_presence_of :password_confirmation, on: :create 
-  validates_confirmation_of :password, message: "does not match"
+  validates_confirmation_of :password, on: :create, message: "does not match"
   validates_length_of :password, minimum: 4, message: "must be at least 4 characters long", allow_blank: true
 
   # Callbacks
