@@ -7,7 +7,7 @@ module Contexts
     end
 
     def destroy_orders
-      @simple_orders.delete
+      @simple_order.delete
     end
 
   end

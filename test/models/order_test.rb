@@ -40,22 +40,22 @@ class OrderTest < ActiveSupport::TestCase
     end
     
     teardown do
-      destroy_order_items
-      destroy_orders
-      destroy_users
-      destroy_schools
-      destroy_board_prices
       destroy_boards
+      destroy_board_prices
+      destroy_schools
+      destroy_users
+      destroy_orders
+      destroy_order_items
     end
 
     should "verify that the user must be active in the system" do
-      #bad_order = FactoryGirl.build(:order, school: @ingomar_elem, user: @inactive_user)
-      #deny bad_order.valid?
+      bad_order = FactoryGirl.build(:order, school: @ingomar_elem, user: @inactive_user)
+      deny bad_order.valid?
     end 
 
     should "verify that the school must be active in the system" do
-      #bad_order = FactoryGirl.build(:order, school: @watchung_high, user: @winston_chu)
-      #deny bad_order.valid?
+      bad_order = FactoryGirl.build(:order, school: @watchung_high, user: @winston_chu)
+      deny bad_order.valid?
     end 
 
   end
