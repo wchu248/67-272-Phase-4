@@ -4,7 +4,6 @@ module Contexts
     # test this with board items (don't forget to call create_boards and destroy_boards)
 
     def create_order_items
-      create_orders
       @vgb_order = FactoryGirl.create(:order_item, item: @vinyl_green, order: @simple_order)
       @vbb_order = FactoryGirl.create(:order_item, item: @vinyl_blue, order: @simple_order, quantity: 2)
       @vrb_order = FactoryGirl.create(:order_item, item: @vinyl_red, order: @simple_order, shipped_on: Date.current)

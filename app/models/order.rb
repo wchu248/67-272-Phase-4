@@ -25,7 +25,7 @@ class Order < ActiveRecord::Base
   scope :for_school,    ->(school_id) { where(school_id: school_id) }
 
   # Validations
-  validates_date :date, on_or_before: lambda { Date.current }
+  validates_date :date, :on_or_before => lambda { Date.current }, :allow_nil => true
   # make sure grand_total is a valid number
   validates_numericality_of :grand_total, greater_than: 0, allow_blank: true
   # make sure required fields are present
@@ -42,7 +42,7 @@ class Order < ActiveRecord::Base
   # Methods
 
   def self.not_shipped
-    self.order_items.where("order_items.shipped_on IS NULL").uniq!
+    joins(:order_items).where("order_items.shipped_on IS NULL").uniq!
   end
 
   def total_weight
@@ -121,7 +121,7 @@ class Order < ActiveRecord::Base
   end
 
   def set_order_date
-    if self.date.nil? || self.date.class != Date || !self.date.respond_to?(:future?) || self.date.future?
+    if self.date.nil? || !self.date.is_a?(Date)
       self.update_attribute(:date, Date.current)
     end
   end
