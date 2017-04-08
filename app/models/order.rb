@@ -7,6 +7,9 @@ class Order < ActiveRecord::Base
   attr_accessor :expiration_year
   attr_accessor :expiration_month
 
+  # additional attributes
+  attr_reader :destroyable
+
   # Relationships
   has_many :order_items
   has_many :items, through: :order_items
@@ -19,7 +22,7 @@ class Order < ActiveRecord::Base
   # returns all orders that have a payment receipt
   scope :paid,          -> { where.not(payment_receipt: nil) }
   # returns all orders for a specified school
-  scope :for_customer,  ->(school_id) { where(school_id: school_id) }
+  scope :for_school,    ->(school_id) { where(school_id: school_id) }
 
   # Validations
   validates_date :date, on_or_before: lambda { Date.current }
@@ -32,10 +35,14 @@ class Order < ActiveRecord::Base
   validate :check_valid_card_number
   validate :check_valid_expr_date
 
+  # Callbacks
+  before_create :set_order_date
+  before_destroy :is_destroyable?
+
   # Methods
 
   def self.not_shipped
-    joins(:order_items).where("order_items.shipped_on IS NULL").uniq!
+    self.order_items.where("order_items.shipped_on IS NULL").uniq!
   end
 
   def total_weight
@@ -113,13 +120,21 @@ class Order < ActiveRecord::Base
     end
   end
 
-  # get the total prices of all the items
-  def get_item_prices
-    total = 0
-    self.order_items.each do |i|
-      total += i.item.current_price * i.quantity
+  def set_order_date
+    if self.date.nil? || self.date.class != Date || !self.date.respond_to?(:future?) || self.date.future?
+      self.update_attribute(:date, Date.current)
     end
-    return total
   end
+
+  def is_destroyable?
+    @destroyable = self.order_items.shipped.empty?
+    if @destroyable
+      self.order_items.each{|i| i.destroy}
+    elsif !@destroyable
+      self.oder_items.unshipped.each{|i| i.destroy}
+    end
+  end
+
+
 
 end

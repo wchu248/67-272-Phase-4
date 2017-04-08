@@ -48,7 +48,6 @@ class School < ActiveRecord::Base
 
   def is_destroyable?
     @destroyable = self.orders.empty?
-    @destroyable
   end
 
   private
