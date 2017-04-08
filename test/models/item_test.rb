@@ -179,7 +179,10 @@ class ItemTest < ActiveSupport::TestCase
       assert_equal false, @vinyl_red.active
       assert_equal false, @mahogany_board.active
       assert_equal false, @maple_board.active
-      # show that any unshipped, unpaid order items for those items are removed
+      # show that any unshipped, unpaid order items for those items are removed and shipped order items still exist
+      assert OrderItem.exists?(@vrb_order.id)
+      assert OrderItem.exists?(@mahogany_order.id)
+      assert OrderItem.exists?(@maple_order.id)
       deny OrderItem.exists?(@unshipped_vrb_order.id)
       deny OrderItem.exists?(@unshipped_mahogany_order.id)
       deny OrderItem.exists?(@unshipped_maple_order.id)
