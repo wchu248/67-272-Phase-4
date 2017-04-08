@@ -42,6 +42,9 @@ class School < ActiveRecord::Base
 
   # Methods
   # -----------------------------
+  def already_exists?
+    School.where(name: self.name, zip: self.zip).size == 1
+  end
 
   def is_destroyable?
     @destroyable = self.orders.empty?
@@ -50,13 +53,9 @@ class School < ActiveRecord::Base
 
   private
 
-  def already_exists?
-    School.where(name: self.name, zip: self.zip).size == 1
-  end
-
   def make_school_inactive_instead_of_destroy
     if !destroyable.nil? && !destroyable
-      self.update_attribute(:active, false)
+      self.active = false
       @destroyable = nil
     end
   end
