@@ -56,7 +56,7 @@ class OrderItemTest < ActiveSupport::TestCase
     # testing shipped and unshipped scope
     should "show that there are three shipped order items and two unshipped order items" do
       assert_equal ["Vinyl Chess Board - Red & White", "Mahogany Wood Chess Board", "Maple Wood Chess Board"], OrderItem.shipped.all.map{|o| o.item.name}
-      assert_equal ["Vinyl Chess Board - Green & White", "Vinyl Chess Board - Blue & White"], OrderItem.unshipped.all.map{|o| o.item.name}
+      assert_equal ["Vinyl Chess Board - Green & White", "Vinyl Chess Board - Blue & White", "Vinyl Chess Board - Red & White", "Mahogany Wood Chess Board", "Maple Wood Chess Board"], OrderItem.unshipped.all.map{|o| o.item.name}
     end
 
     # test the custom validation 'item_is_active_in_system'

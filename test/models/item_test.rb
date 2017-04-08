@@ -114,5 +114,85 @@ class ItemTest < ActiveSupport::TestCase
       assert_nil @basic_pieces.manufacturer_price_on_date(36.months.ago.to_date)
       destroy_piece_prices      
     end
+
+    should "make sure that items that have never been shipped can be destroyed" do
+      # creating the rest of the stuff for the context of this test
+      create_boards
+      create_clocks
+      create_supplies
+      create_item_prices
+      create_schools
+      create_users
+      create_orders
+      create_order_items
+      # show that items that have never been shipped can be destroyed
+      assert @vinyl_green.destroy
+      assert @vinyl_blue.destroy
+      # destroyed the rest of the stuff for the context of this test
+      destroy_boards
+      destroy_clocks
+      destroy_supplies
+      destroy_item_prices
+      destroy_schools
+      destroy_users
+      destroy_orders
+      destroy_order_items
+    end
+
+    should "make sure that items that have been shipped are made inactive and their respective order items are destroyed properly" do 
+      # creating the rest of the stuff for the context of this test
+      create_boards
+      create_clocks
+      create_supplies
+      create_item_prices
+      create_schools
+      create_users
+      create_orders
+      create_order_items
+      # show that items that have been shipped are originally active before trying to destroy
+      assert_equal true, @vinyl_red.active
+      assert_equal true, @mahogany_board.active
+      assert_equal true, @maple_board.active
+      # show that the order items for the items that have been shipped are originally in the system before trying to destroy
+      assert OrderItem.exists?(@vrb_order.id)
+      assert OrderItem.exists?(@mahogany_order.id)
+      assert OrderItem.exists?(@maple_order.id)
+      assert OrderItem.exists?(@unshipped_vrb_order.id)
+      assert OrderItem.exists?(@unshipped_mahogany_order.id)
+      assert OrderItem.exists?(@unshipped_maple_order.id)
+      # check that certain order items are actually unshipped and unpaid
+      assert_not_nil @vrb_order.shipped_on
+      assert_not_nil @mahogany_order.shipped_on
+      assert_not_nil @maple_order.shipped_on
+      assert_nil @unshipped_vrb_order.order.payment_receipt
+      assert_nil @unshipped_mahogany_order.order.payment_receipt
+      assert_nil @unshipped_maple_order.order.payment_receipt
+      assert_nil @unshipped_vrb_order.shipped_on
+      assert_nil @unshipped_mahogany_order.shipped_on
+      assert_nil @unshipped_maple_order.shipped_on
+      # THEN TRY TO DESTROY THE ITEMS
+      # show that items that have been shipped cannot be destroyed
+      deny @vinyl_red.destroy
+      deny @mahogany_board.destroy
+      deny @maple_board.destroy
+      # show that items that have been shipped are made inactive
+      assert_equal false, @vinyl_red.active
+      assert_equal false, @mahogany_board.active
+      assert_equal false, @maple_board.active
+      # show that any unshipped, unpaid order items for those items are removed
+      deny OrderItem.exists?(@unshipped_vrb_order.id)
+      deny OrderItem.exists?(@unshipped_mahogany_order.id)
+      deny OrderItem.exists?(@unshipped_maple_order.id)
+      # destroyed the rest of the stuff for the context of this test
+      destroy_boards
+      destroy_clocks
+      destroy_supplies
+      destroy_item_prices
+      destroy_schools
+      destroy_users
+      destroy_orders
+      destroy_order_items
+    end
+
   end
 end
