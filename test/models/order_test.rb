@@ -89,6 +89,67 @@ class OrderTest < ActiveSupport::TestCase
     end
 
     should "show that the credit_card_type method works correctly" do
+      # testing N/A result
+      @simple_order.credit_card_number = nil
+      assert_equal "N/A", @simple_order.credit_card_type
+      @simple_order.credit_card_number = 123081271827519
+      assert_equal "N/A", @simple_order.credit_card_type
+      # testing VISA cards
+      @simple_order.credit_card_number = 4123456789012
+      assert_equal "VISA", @simple_order.credit_card_type
+      @simple_order.credit_card_number = 4123456789012345
+      assert_equal "VISA", @simple_order.credit_card_type
+      # testing MC cards
+      @simple_order.credit_card_number = 5123456789012345
+      assert_equal "MC", @simple_order.credit_card_type
+      @simple_order.credit_card_number = 5423456789012345
+      assert_equal "MC", @simple_order.credit_card_type
+      # testing DISC cards
+      @simple_order.credit_card_number = 6512345678901234
+      assert_equal "DISC", @simple_order.credit_card_type     
+      @simple_order.credit_card_number = 6011123456789012
+      assert_equal "DISC", @simple_order.credit_card_type      
+      # testing DCCB cards
+      @simple_order.credit_card_number = 30012345678901
+      assert_equal "DCCB", @simple_order.credit_card_type    
+      @simple_order.credit_card_number = 30312345678901
+      assert_equal "DCCB", @simple_order.credit_card_type      
+      # testing AMEX cards
+      @simple_order.credit_card_number = 341234567890123
+      assert_equal "AMEX", @simple_order.credit_card_type
+      @simple_order.credit_card_number = 371234567890123
+      assert_equal "AMEX", @simple_order.credit_card_type
+    end
+
+    should "show that the order model can accept the credit card info as properties of an order" do
+      assert @simple_order.respond_to?(:credit_card_number)
+      assert @simple_order.respond_to?(:credit_card_number=)
+      assert @simple_order.respond_to?(:expiration_year)
+      assert @simple_order.respond_to?(:expiration_year=)
+      assert @simple_order.respond_to?(:expiration_month)
+      assert @simple_order.respond_to?(:expiration_month=)
+    end
+
+    should "show that invalid credit card numbers and expired cards cannot be accepted" do
+      # if the number is invalid
+      @bad_number = FactoryGirl.build(:order, school: @ingomar_elem, user: @winston_chu, credit_card_number: 12345, expiration_year: Date.current.year + 1, expiration_month: 1)
+      deny @bad_number.valid?
+      # with a valid number...
+      # if the year is past...
+      @expired_card1 = FactoryGirl.build(:order, school: @ingomar_elem, user: @winston_chu, credit_card_number: 30012345678901, expiration_year: Date.current.year - 1, expiration_month: 1)
+      deny @expired_card1.valid?
+      # if the year is the same but the month is past...
+      @expired_card2 = FactoryGirl.build(:order, school: @ingomar_elem, user: @winston_chu, credit_card_number: 30012345678901, expiration_year: Date.current.year, expiration_month: Date.current.month == 1 ? 12 : Date.current.month - 1)
+      deny @expired_card2.valid?
+      # if the year is the same but the month is the current month...
+      @not_expired = FactoryGirl.build(:order, school: @ingomar_elem, user: @winston_chu, credit_card_number: 30012345678901, expiration_year: Date.current.year, expiration_month: Date.current.month)
+      assert @not_expired.valid?
+      # with an invalid number and an expired date
+      @really_bad_card = FactoryGirl.build(:order, school: @ingomar_elem, user: @winston_chu, credit_card_number: 12345, expiration_year: Date.current.year - 1, expiration_month: 1)
+      deny @really_bad_card.valid?
+    end
+
+    should "show that the pay method works correctly" do
       
     end
 
