@@ -63,6 +63,9 @@ FactoryGirl.define do
     date Date.current
     grand_total 5.00
     payment_receipt nil
+    credit_card_number "4123456789012"
+    expiration_year 1.year.from_now.to_date.year
+    expiration_month 12
   end
 
 end

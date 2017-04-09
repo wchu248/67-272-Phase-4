@@ -28,7 +28,7 @@ class Order < ActiveRecord::Base
   # make sure grand_total is a valid number
   validates_numericality_of :grand_total, greater_than: 0, allow_blank: true
   # make sure required fields are present
-  validates_presence_of :school_id, :user_id
+  validates_presence_of :school_id, :user_id, :credit_card_number, :expiration_year, :expiration_month
   validates_presence_of :date, allow_blank: true
   validate :user_is_active_in_system
   validate :school_is_active_in_system
