@@ -10,15 +10,6 @@ class OrderTest < ActiveSupport::TestCase
 
   # test simple validations with matchers
   should validate_numericality_of(:grand_total).is_greater_than(0)
-  
-  # testing date...
-  should allow_value(Date.current).for(:date)
-  should allow_value(13.days.ago.to_date).for(:date)
-  
-  should_not allow_value(13.days.from_now.to_date).for(:date)
-  should_not allow_value("bad").for(:date)
-  should_not allow_value(2).for(:date)
-  should_not allow_value(3.14159).for(:date)
 
   # testing grand total...
   should allow_value(10).for(:grand_total)
@@ -72,8 +63,10 @@ class OrderTest < ActiveSupport::TestCase
 
     # THIS DOESN'T WORK AND IDK WHYYYYYYY
     should "set the date to the current date if it is not specified or if it is not a legitimate date" do
-      #@illegitimate_date = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: nil)
-      #assert_equal Date.current, @illegitimate_date.date
+      @illegitimate_date1 = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: nil)
+      assert_equal Date.current, @illegitimate_date1.date
+      @illegitimate_date2 = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: "hello")
+      assert_equal Date.current, @illegitimate_date2.date
     end
 
     should "show that the not_shipped method works correctly" do

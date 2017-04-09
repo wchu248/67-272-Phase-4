@@ -25,11 +25,11 @@ class Order < ActiveRecord::Base
   scope :for_school,    ->(school_id) { where(school_id: school_id) }
 
   # Validations
-  validates_date :date, :on_or_before => lambda { Date.current }, :allow_nil => true
   # make sure grand_total is a valid number
   validates_numericality_of :grand_total, greater_than: 0, allow_blank: true
   # make sure required fields are present
-  validates_presence_of :school_id, :user_id, :date
+  validates_presence_of :school_id, :user_id
+  validates_presence_of :date, allow_blank: true
   validate :user_is_active_in_system
   validate :school_is_active_in_system
   validate :check_valid_card_number
