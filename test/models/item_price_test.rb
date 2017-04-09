@@ -44,7 +44,7 @@ class ItemPriceTest < ActiveSupport::TestCase
       assert_equal Date.current, @wtp3.end_date
       # for manufacturer prices
       assert_nil @wtp2.end_date
-      @change_m_price = FactoryGirl.create(:item_price, item:@weighted_pieces, price: 10.00, category: "manufacturer")
+      @change_m_price = FactoryGirl.create(:item_price, item: @weighted_pieces, price: 10.00, category: "manufacturer")
       @wtp2.reload
       assert_equal Date.current, @wtp2.end_date
 
@@ -77,6 +77,7 @@ class ItemPriceTest < ActiveSupport::TestCase
     # testing that item prices can never de destroyed
     should "show that item prices can never be destroyed" do 
       deny @wtp3.destroy
+      deny @wtp2.destroy
     end
 
   end

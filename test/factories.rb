@@ -9,6 +9,7 @@ FactoryGirl.define do
     inventory_level 100
     reorder_level 25
     active true
+    picture nil
   end
 
   factory :item_price do

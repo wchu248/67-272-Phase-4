@@ -57,6 +57,7 @@ class PurchaseTest < ActiveSupport::TestCase
     # testing that purchases can never de destroyed
     should "show that purchases can never be destroyed" do 
       deny @p_vboards.destroy
+      deny @p_vboards2.destroy
     end
 
   end
