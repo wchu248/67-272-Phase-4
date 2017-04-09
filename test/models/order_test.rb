@@ -161,6 +161,7 @@ class OrderTest < ActiveSupport::TestCase
       @simple_order.reload
       assert_not_nil @simple_order.payment_receipt
       assert_equal false, @simple_order.pay
+      assert_equal "order: #{@simple_order.id}; amount_paid: #{@simple_order.grand_total}; received: #{@simple_order.date}; card: #{@simple_order.credit_card_type} ****#{@simple_order.credit_card_number.to_s[-4..-1]}", Base64.decode64(@simple_order.payment_receipt)
     end
 
     should "show that orders with no shipped items can be destroyed" do
