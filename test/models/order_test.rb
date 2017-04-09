@@ -41,6 +41,8 @@ class OrderTest < ActiveSupport::TestCase
       @u_o_oi21 = FactoryGirl.create(:order_item, item: @weighted_pieces, order: @not_shipped1, quantity: 5)
       @u_o_oi12 = FactoryGirl.create(:order_item, item: @wooden_pieces, order: @not_shipped2, shipped_on: Date.current, quantity: 10)
       @u_o_oi22 = FactoryGirl.create(:order_item, item: @analog_clock, order: @not_shipped2, shipped_on: Date.current)
+      @u_o_oi13 = FactoryGirl.create(:order_item, item: @chess_bag_green, order: @none_shipped, quantity: 4)
+      @u_o_oi23 = FactoryGirl.create(:order_item, item: @chess_bag_brown, order: @none_shipped)
     end
     
     teardown do
@@ -54,6 +56,8 @@ class OrderTest < ActiveSupport::TestCase
       @u_o_oi21.delete
       @u_o_oi12.delete
       @u_o_oi22.delete
+      @u_o_oi13.delete
+      @u_o_oi23.delete
     end
 
     should "verify that the user must be active in the system" do
@@ -73,19 +77,21 @@ class OrderTest < ActiveSupport::TestCase
     end
 
     should "show that the not_shipped method works correctly" do
-      assert_equal [5.00, 6.00], Order.not_shipped.all.map{ |i| i.grand_total }
+      assert_equal [5.00, 6.00, 8.00], Order.not_shipped.all.map{|o| o.grand_total}
     end
     
     should "show that the total_weight method works correctly" do
       assert_in_delta 11.1, @simple_order.total_weight
       assert_in_delta 11.85, @not_shipped1.total_weight
       assert_in_delta 20.9, @not_shipped2.total_weight
+      assert_in_delta 1.5, @none_shipped.total_weight
     end
 
     should "show that the shipping_costs method works correctly" do
       assert_equal 7.00, @simple_order.shipping_costs
       assert_equal 7.00, @not_shipped1.shipping_costs
       assert_equal 9.25, @not_shipped2.shipping_costs
+      assert_equal 5.00, @none_shipped.shipping_costs
     end
 
     should "show that the credit_card_type method works correctly" do
@@ -150,7 +156,40 @@ class OrderTest < ActiveSupport::TestCase
     end
 
     should "show that the pay method works correctly" do
-      
+      assert_nil @simple_order.payment_receipt
+      @simple_order.pay
+      @simple_order.reload
+      assert_not_nil @simple_order.payment_receipt
+      assert_equal false, @simple_order.pay
+    end
+
+    should "show that orders with no shipped items can be destroyed" do
+      assert @none_shipped.destroy
+      # make sure the associated order items are gone as well
+      deny OrderItem.exists?(@u_o_oi13.id)
+      deny OrderItem.exists?(@u_o_oi23.id)
+      # try to destroy an order that can't be destroyed
+      deny @not_shipped1.destroy
+      # make sure order and shipped order items are still in system
+      assert Order.exists?(@not_shipped1.id)
+      assert OrderItem.exists?(@u_o_oi11.id)
+      # make sure the unshipped order items are removed/cancelled
+      deny OrderItem.exists?(@u_o_oi21.id)
+    end
+
+    should "show that the chronological scope works properly" do
+      assert_equal [5.00, 6.00, 7.00, 8.00], Order.chronological.all.map{|o| o.grand_total}
+    end
+
+    should "show that the paid scope works properly" do
+      assert_equal [6.00, 8.00], Order.paid.all.map{|o| o.grand_total}
+    end
+
+    should "show that the for_school scope works properly" do
+      assert_equal [5.00], Order.for_school(@ingomar_elem.id).all.map{|o| o.grand_total}
+      assert_equal [6.00, 8.00], Order.for_school(@central_school1.id).all.map{|o| o.grand_total}
+      assert_equal [7.00], Order.for_school(@warren_middle.id).all.map{|o| o.grand_total}
+      assert_equal [], Order.for_school(@central_school3.id).all.map{|o| o.grand_total}
     end
 
   end

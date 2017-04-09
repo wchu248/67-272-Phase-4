@@ -38,6 +38,7 @@ class Order < ActiveRecord::Base
   # Callbacks
   before_create :set_order_date
   before_destroy :is_destroyable?
+  after_rollback :remove_unshipped_items
 
   # Methods
 
@@ -55,7 +56,11 @@ class Order < ActiveRecord::Base
 
   def shipping_costs
     weight = self.total_weight.floor
-    extra_pounds = weight - 3
+    if weight > 3
+      extra_pounds = weight - 3
+    else
+      extra_pounds = 0
+    end
     5 + (0.25 * extra_pounds)
   end
 
@@ -73,7 +78,7 @@ class Order < ActiveRecord::Base
 
   def pay
     if self.payment_receipt.nil?
-      receipt = Base64.encode64("order: #{self.id}; amount_paid: #{self.grand_total}; received: #{self.date}; card: #{self.credit_card_type} ****#{self.credit_card_number[-4..-1]}")
+      receipt = Base64.encode64("order: #{self.id}; amount_paid: #{self.grand_total}; received: #{self.date}; card: #{self.credit_card_type} ****#{self.credit_card_number.to_s[-4..-1]}")
       self.update_attribute(:payment_receipt, receipt)
       self.save!
       self.payment_receipt
@@ -130,8 +135,14 @@ class Order < ActiveRecord::Base
     @destroyable = self.order_items.shipped.empty?
     if @destroyable
       self.order_items.each{|i| i.destroy}
-    elsif !@destroyable
-      self.oder_items.unshipped.each{|i| i.destroy}
+    end
+    @destroyable
+  end
+
+  def remove_unshipped_items
+    if !destroyable.nil? && !destroyable
+      self.order_items.unshipped.each{|i| i.destroy}
+      @destroyable = nil
     end
   end
 
