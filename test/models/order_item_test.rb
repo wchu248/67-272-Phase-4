@@ -83,6 +83,8 @@ class OrderItemTest < ActiveSupport::TestCase
       vbb_old_inv = @vbb_order.item.inventory_level
       @vgb_order.shipped
       @vbb_order.shipped
+      @vgb_order.reload
+      @vbb_order.reload
       assert_equal Date.current, @vgb_order.shipped_on
       assert_equal Date.current, @vbb_order.shipped_on
       assert_equal @vgb_order.item.inventory_level, vgb_old_inv - @vgb_order.quantity
