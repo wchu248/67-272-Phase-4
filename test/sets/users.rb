@@ -21,7 +21,8 @@ module Contexts
         last_name: "Anderson",
         username: "seanande1",
         email: "sean_a@gmail.com",
-        role: "shipper")
+        role: "shipper",
+        phone: nil)
       @inactive_user = FactoryGirl.create(:user,
         first_name: "Inactive",
         last_name: "User",

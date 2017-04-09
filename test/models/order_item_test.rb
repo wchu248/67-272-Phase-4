@@ -54,7 +54,7 @@ class OrderItemTest < ActiveSupport::TestCase
     end
 
     # testing shipped and unshipped scope
-    should "show that there are three shipped order items and two unshipped order items" do
+    should "show that there are three shipped order items and five unshipped order items" do
       assert_equal ["Vinyl Chess Board - Red & White", "Mahogany Wood Chess Board", "Maple Wood Chess Board"], OrderItem.shipped.all.map{|o| o.item.name}
       assert_equal ["Vinyl Chess Board - Green & White", "Vinyl Chess Board - Blue & White", "Vinyl Chess Board - Red & White", "Mahogany Wood Chess Board", "Maple Wood Chess Board"], OrderItem.unshipped.all.map{|o| o.item.name}
     end
@@ -70,7 +70,7 @@ class OrderItemTest < ActiveSupport::TestCase
     # test the subtotal instance method
     should "show that the subtotal instance method returns the correct output" do
       assert_equal 2.75, @vgb_order.subtotal
-      assert_equal (3.10 * 2), @vbb_order.subtotal
+      assert_equal 6.20, @vbb_order.subtotal
       assert_equal 2.50, @vgb_order.subtotal(1.month.ago.to_date)
       assert_nil @vgb_order.subtotal(3.days.from_now.to_date)
     end

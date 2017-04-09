@@ -109,6 +109,7 @@ class UserTest < ActiveSupport::TestCase
     should "show that phone numbers are reformatted properly" do
       assert_equal "9088388767", @winston_chu.phone
       assert_equal "1234567890", @inactive_user.phone
+      assert_nil @sean_anderson.phone
     end
 
     # testing that uses can never de destroyed

@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   # the role of each user must be one of 4 available roles
   validates_inclusion_of :role, in: %w[admin customer manager shipper], message: 'is not an option'
   # make sure phone numbers have correct format
-  validates_format_of :phone, with: /\A(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4})\z/, message: "is not a valid format"
+  validates_format_of :phone, with: /\A(\d{10}|\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4})\z/, message: "is not a valid format", allow_nil: true
   # make sure emails have correct format
   validates_format_of :email, with: /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net))\z/i, message: "is not a valid format"
   # validating password stuff
@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
   end
 
   def reformat_phone
-    self.phone = self.phone.to_s.gsub(/[^0-9]/,"")
+    self.phone = self.phone.to_s.gsub(/[^0-9]/,"") unless self.phone.nil?
   end
 
 end
