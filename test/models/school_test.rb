@@ -25,15 +25,6 @@ class SchoolTest < ActiveSupport::TestCase
   should_not allow_value(1521).for(:zip)
   should_not allow_value(nil).for(:zip)
 
-  # Validating min_grade...
-  should allow_value(1).for(:min_grade)
-  should allow_value(0).for(:min_grade)
-
-  should_not allow_value(13).for(:min_grade)
-  should_not allow_value(-1).for(:min_grade)
-  should_not allow_value(1.5).for(:min_grade)
-  should_not allow_value("bad").for(:min_grade)
-
   # testing other scopes/methods with a context
   context "Within context" do
 
@@ -71,12 +62,6 @@ class SchoolTest < ActiveSupport::TestCase
       assert @warren_middle.valid?
     end
 
-    should "show that a school cannot have a max_grade larger than a min_grade" do
-      bad_school = FactoryGirl.build(:school, name: "bad school", zip: "91924", min_grade: 6, max_grade: 4)
-      deny bad_school.valid?
-      bad_school.destroy
-    end
-
     # testing max_grade...
     should "show that max_grade is valid and invalid where it should be" do
       assert @ingomar_elem.valid?
@@ -91,6 +76,22 @@ class SchoolTest < ActiveSupport::TestCase
       deny @bad_school4.valid?
       @bad_school5 = FactoryGirl.build(:school, max_grade: 3, min_grade: 5)
       deny @bad_school5.valid?
+    end
+
+    # testing min_grade...
+    should "show that min_grade is valid and invalid where it should be" do
+      assert @ingomar_elem.valid?
+      assert @warren_middle.valid?
+      @bad_school6 = FactoryGirl.build(:school, min_grade: -1)
+      deny @bad_school6.valid?
+      @bad_school7 = FactoryGirl.build(:school, min_grade: 13)
+      deny @bad_school7.valid?
+      @bad_school8 = FactoryGirl.build(:school, min_grade: 1.5)
+      deny @bad_school8.valid?
+      @bad_school9 = FactoryGirl.build(:school, min_grade: "bad")
+      deny @bad_school9.valid?
+      @bad_school10 = FactoryGirl.build(:school, min_grade: 5, max_grade: 3)
+      deny @bad_school10.valid?
     end
 
     # testing destroyable aspect
