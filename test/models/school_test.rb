@@ -13,6 +13,7 @@ class SchoolTest < ActiveSupport::TestCase
 
   should validate_inclusion_of(:state).in_array(School::STATES_LIST.to_h.values)
   should_not allow_value("Pennsylvania").for(:state)
+  should_not allow_value(0).for(:state)
 
   # Validating zip codes...
   should allow_value("03412").for(:zip)
@@ -37,12 +38,12 @@ class SchoolTest < ActiveSupport::TestCase
     end
 
     # testing alphabetical scope
-    should "show that there are four schools in in alphabetical order" do
+    should "show that there are five schools in in alphabetical order" do
       assert_equal ["Central School", "Central School", "Ingomar Elementary", "Warren Middle School", "Watchung Hills Regional High School"], School.alphabetical.all.map(&:name)
     end
 
     # testing active and inactive scopes
-    should "show that there are three active schools and one inactive school" do
+    should "show that there are four active schools and one inactive school" do
       assert_equal ["Ingomar Elementary", "Central School", "Warren Middle School", "Central School"], School.active.all.map(&:name)
       assert_equal ["Watchung Hills Regional High School"], School.inactive.all.map(&:name)
     end
@@ -54,8 +55,12 @@ class SchoolTest < ActiveSupport::TestCase
       central_school2.destroy
     end
 
-    should "show that a school with the same name can be created in the same town" do
+    should "show that a school with the same name can be created in a different town" do
       assert @central_school3.valid?
+    end
+
+    should "show that a school with a different name can be created in the same town" do
+      assert @warren_middle.valid?
     end
 
     should "show that min_grade and max_grade can be the same" do

@@ -1,4 +1,5 @@
 FactoryGirl.define do
+  
   factory :item do
     name "Vinyl Chess Board - Green & White"
     description "These Vinyl Chess Boards are just what their name implies - a good basic chess board which meets all tournament standards. Board measures 20x20 inches with 2.25 inch square and all boards have clear and legible algebraic notation."
