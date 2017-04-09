@@ -61,7 +61,6 @@ class OrderTest < ActiveSupport::TestCase
       deny bad_order.valid?
     end 
 
-    # THIS DOESN'T WORK AND IDK WHYYYYYYY
     should "set the date to the current date if it is not specified or if it is not a legitimate date" do
       @illegitimate_date1 = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: nil)
       assert_equal Date.current, @illegitimate_date1.date
