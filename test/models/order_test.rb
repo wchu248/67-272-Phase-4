@@ -66,6 +66,8 @@ class OrderTest < ActiveSupport::TestCase
       assert_equal Date.current, @illegitimate_date1.date
       @illegitimate_date2 = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: "hello")
       assert_equal Date.current, @illegitimate_date2.date
+      @illegitimate_date3 = FactoryGirl.create(:order, school: @ingomar_elem, user: @winston_chu, date: "")
+      assert_equal Date.current, @illegitimate_date3.date      
     end
 
     should "show that the not_shipped method works correctly" do
