@@ -122,36 +122,38 @@ class UserTest < ActiveSupport::TestCase
 
     # testing unique emails
     should "require users to have unique emails" do
-      bad_user = FactoryGirl.build(:user, first_name: "John", email: "wchu27@gmail.com")
-      deny bad_user.valid?
+      @bad_user = FactoryGirl.build(:user, first_name: "John", email: "wchu27@gmail.com")
+      deny @bad_user.valid?
     end
 
     # testing unique usernames
     should "require users to have unique usernames" do
-      bad_user = FactoryGirl.build(:user, first_name: "John", username: "wpchu")
-      deny bad_user.valid?
-      bad_user2 = FactoryGirl.build(:user, first_name: "John", username: "WPchu")
-      deny bad_user2.valid?
+      @bad_user2 = FactoryGirl.build(:user, first_name: "John", username: "wpchu")
+      deny @bad_user2.valid?
+      @bad_user3 = FactoryGirl.build(:user, first_name: "John", username: "WPchu")
+      deny @bad_user3.valid?
     end
     
     # new users need to have a password
     should "require a password for new users" do
-      bad_user = FactoryGirl.build(:user, first_name: "John", password: nil)
-      deny bad_user.valid?
+      @bad_user4 = FactoryGirl.build(:user, first_name: "John", password: nil)
+      deny @bad_user4.valid?
     end
     
     # passwords must be properly confirmed
     should "require passwords to be confirmed and matching" do
-      bad_user_1 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: nil)
-      deny bad_user_1.valid?
-      bad_user_2 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: "sauce")
-      deny bad_user_2.valid?
+      @bad_user5 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: nil)
+      deny @bad_user5.valid?
+      @bad_user6 = FactoryGirl.build(:user, first_name: "John", password: "secret", password_confirmation: "sauce")
+      deny @bad_user6.valid?
     end
     
     # testing that passwords are at least 4 characters in length
     should "require passwords to be at least four characters" do
-      bad_user = FactoryGirl.build(:user, first_name: "John", password: "no")
-      deny bad_user.valid?
+      @bad_user7 = FactoryGirl.build(:user, first_name: "John", password: "no")
+      deny @bad_user7.valid?
+      @bad_user8 = FactoryGirl.build(:user, first_name: "John", password: "hello")
+      deny @bad_user8.valid?
     end
 
   end
