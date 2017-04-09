@@ -27,7 +27,7 @@ class CreditCard
 
   # returns true if the card is expired (expiration date is before today)
   def expired?
-    @exp_year < Date.today.year || (@exp_year == Date.today.year && @exp_month < Date.today.month)
+    @exp_year < Date.current.year || (@exp_year == Date.current.year && @exp_month < Date.current.month)
   end
 
   # returns true if the card is valid (number is correct format and not expired)
